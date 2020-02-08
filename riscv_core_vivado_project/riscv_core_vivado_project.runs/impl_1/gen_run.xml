@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1581183129">
+  <File Type="BITSTR-BMM" Name="ram2ddrxadc_bd.bmm"/>
+  <File Type="OPT-METHODOLOGY-DRC" Name="ram2ddrxadc_methodology_drc_opted.rpt"/>
+  <File Type="INIT-TIMING" Name="ram2ddrxadc_timing_summary_init.rpt"/>
+  <File Type="ROUTE-PWR" Name="ram2ddrxadc_power_routed.rpt"/>
+  <File Type="PA-TCL" Name="ram2ddrxadc.tcl"/>
+  <File Type="OPT-TIMING" Name="ram2ddrxadc_timing_summary_opted.rpt"/>
+  <File Type="OPT-DCP" Name="ram2ddrxadc_opt.dcp"/>
+  <File Type="ROUTE-PWR-SUM" Name="ram2ddrxadc_power_summary_routed.pb"/>
+  <File Type="REPORTS-TCL" Name="ram2ddrxadc_reports.tcl"/>
+  <File Type="OPT-DRC" Name="ram2ddrxadc_drc_opted.rpt"/>
+  <File Type="OPT-HWDEF" Name="ram2ddrxadc.hwdef"/>
+  <File Type="PWROPT-DCP" Name="ram2ddrxadc_pwropt.dcp"/>
+  <File Type="PWROPT-DRC" Name="ram2ddrxadc_drc_pwropted.rpt"/>
+  <File Type="PWROPT-TIMING" Name="ram2ddrxadc_timing_summary_pwropted.rpt"/>
+  <File Type="PLACE-DCP" Name="ram2ddrxadc_placed.dcp"/>
+  <File Type="PLACE-IO" Name="ram2ddrxadc_io_placed.rpt"/>
+  <File Type="PLACE-CLK" Name="ram2ddrxadc_clock_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL" Name="ram2ddrxadc_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL-PB" Name="ram2ddrxadc_utilization_placed.pb"/>
+  <File Type="PLACE-CTRL" Name="ram2ddrxadc_control_sets_placed.rpt"/>
+  <File Type="PLACE-SIMILARITY" Name="ram2ddrxadc_incremental_reuse_placed.rpt"/>
+  <File Type="PLACE-PRE-SIMILARITY" Name="ram2ddrxadc_incremental_reuse_pre_placed.rpt"/>
+  <File Type="BG-BGN" Name="ram2ddrxadc.bgn"/>
+  <File Type="PLACE-TIMING" Name="ram2ddrxadc_timing_summary_placed.rpt"/>
+  <File Type="POSTPLACE-PWROPT-DCP" Name="ram2ddrxadc_postplace_pwropt.dcp"/>
+  <File Type="BG-BIN" Name="ram2ddrxadc.bin"/>
+  <File Type="POSTPLACE-PWROPT-TIMING" Name="ram2ddrxadc_timing_summary_postplace_pwropted.rpt"/>
+  <File Type="PHYSOPT-DCP" Name="ram2ddrxadc_physopt.dcp"/>
+  <File Type="PHYSOPT-DRC" Name="ram2ddrxadc_drc_physopted.rpt"/>
+  <File Type="BITSTR-MSK" Name="ram2ddrxadc.msk"/>
+  <File Type="PHYSOPT-TIMING" Name="ram2ddrxadc_timing_summary_physopted.rpt"/>
+  <File Type="ROUTE-ERROR-DCP" Name="ram2ddrxadc_routed_error.dcp"/>
+  <File Type="ROUTE-DCP" Name="ram2ddrxadc_routed.dcp"/>
+  <File Type="ROUTE-BLACKBOX-DCP" Name="ram2ddrxadc_routed_bb.dcp"/>
+  <File Type="ROUTE-DRC" Name="ram2ddrxadc_drc_routed.rpt"/>
+  <File Type="ROUTE-DRC-PB" Name="ram2ddrxadc_drc_routed.pb"/>
+  <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
+  <File Type="BITSTR-LTX" Name="ram2ddrxadc.ltx"/>
+  <File Type="ROUTE-DRC-RPX" Name="ram2ddrxadc_drc_routed.rpx"/>
+  <File Type="BITSTR-MMI" Name="ram2ddrxadc.mmi"/>
+  <File Type="ROUTE-METHODOLOGY-DRC" Name="ram2ddrxadc_methodology_drc_routed.rpt"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="ram2ddrxadc_methodology_drc_routed.rpx"/>
+  <File Type="BITSTR-SYSDEF" Name="ram2ddrxadc.sysdef"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="ram2ddrxadc_methodology_drc_routed.pb"/>
+  <File Type="ROUTE-PWR-RPX" Name="ram2ddrxadc_power_routed.rpx"/>
+  <File Type="ROUTE-STATUS" Name="ram2ddrxadc_route_status.rpt"/>
+  <File Type="ROUTE-STATUS-PB" Name="ram2ddrxadc_route_status.pb"/>
+  <File Type="ROUTE-TIMINGSUMMARY" Name="ram2ddrxadc_timing_summary_routed.rpt"/>
+  <File Type="ROUTE-TIMING-PB" Name="ram2ddrxadc_timing_summary_routed.pb"/>
+  <File Type="ROUTE-TIMING-RPX" Name="ram2ddrxadc_timing_summary_routed.rpx"/>
+  <File Type="ROUTE-SIMILARITY" Name="ram2ddrxadc_incremental_reuse_routed.rpt"/>
+  <File Type="ROUTE-CLK" Name="ram2ddrxadc_clock_utilization_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW" Name="ram2ddrxadc_bus_skew_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW-PB" Name="ram2ddrxadc_bus_skew_routed.pb"/>
+  <File Type="ROUTE-BUS-SKEW-RPX" Name="ram2ddrxadc_bus_skew_routed.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-DCP" Name="ram2ddrxadc_postroute_physopt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="ram2ddrxadc_postroute_physopt_bb.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="ram2ddrxadc_timing_summary_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="ram2ddrxadc_timing_summary_postroute_physopted.pb"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="ram2ddrxadc_timing_summary_postroute_physopted.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW" Name="ram2ddrxadc_bus_skew_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-PB" Name="ram2ddrxadc_bus_skew_postroute_physopted.pb"/>
+  <File Type="BG-BIT" Name="ram2ddrxadc.bit"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="ram2ddrxadc_bus_skew_postroute_physopted.rpx"/>
+  <File Type="BITSTR-RBT" Name="ram2ddrxadc.rbt"/>
+  <File Type="BITSTR-NKY" Name="ram2ddrxadc.nky"/>
+  <File Type="BG-DRC" Name="ram2ddrxadc.drc"/>
+  <File Type="RDI-RDI" Name="ram2ddrxadc.vdi"/>
+  <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/imports/80939/Downloads/ram2ddr_refcomp/Ram2Ddr_RefComp/Source/Ram2DdrXadc_RefComp/ram2ddrxadc.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../../../Downloads/ram2ddr_refcomp/Ram2Ddr_RefComp/Source/Ram2DdrXadc_RefComp/ram2ddrxadc.vhd"/>
+        <Attr Name="ImportTime" Val="1393249530"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/80939/Desktop/ELEC222-Project/riscv-soc/riscv-core/src/ALU.v">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../src/ALU.v"/>
+        <Attr Name="ImportTime" Val="1581178150"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/80939/Desktop/ELEC222-Project/riscv-soc/riscv-core/src/ALUControl.v">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../src/ALUControl.v"/>
+        <Attr Name="ImportTime" Val="1581176322"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/80939/Desktop/ELEC222-Project/riscv-soc/riscv-core/src/RegisterFile.v">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../src/RegisterFile.v"/>
+        <Attr Name="ImportTime" Val="1581168094"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/ddr/mig.prj">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../../../Downloads/ram2ddr_refcomp/Ram2Ddr_RefComp/Source/Ram2DdrXadc_RefComp/ipcore_dir/ddr/mig.prj"/>
+        <Attr Name="ImportTime" Val="1392973923"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="ScopedToCell" Val="ddr"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/ip/ddr/ddr/mig.prj">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="ScopedToCell" Val="ddr"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="ram2ddrxadc"/>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1">
+    <Filter Type="Utils"/>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
+      <Desc>Default settings for Implementation.</Desc>
+    </StratHandle>
+    <Step Id="init_design"/>
+    <Step Id="opt_design"/>
+    <Step Id="power_opt_design"/>
+    <Step Id="place_design"/>
+    <Step Id="post_place_power_opt_design"/>
+    <Step Id="phys_opt_design"/>
+    <Step Id="route_design"/>
+    <Step Id="post_route_phys_opt_design"/>
+    <Step Id="write_bitstream"/>
+  </Strategy>
+  <BlockFileSet Type="BlockSrcs" Name="ddr"/>
+</GenRun>
