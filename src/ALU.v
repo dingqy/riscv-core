@@ -26,14 +26,14 @@ module ALU(
   wire overflow; // The overflow bit
   wire numberCmp; // The result of two signed numbers comparison
   wire branchEqual; // The result of whether two numbers are equal
-  wire signed [31:0] multiply1_signed;
-  wire signed [31:0] multiply2_signed;
-  wire overflow_div;
-  wire zero_div;
-  wire [31:0] divResult;
-  wire division_remainder;
-  wire remainder;
-  wire [31:0] mul_div_rmdResult;
+  wire signed [31:0] multiply1_signed; // Signed number of a
+  wire signed [31:0] multiply2_signed; // Signed number of b
+  wire overflow_div; // If a is -2^(L-1) and b is -1, it will overflow
+  wire zero_div; // Divide Zero Exception
+  wire [31:0] divResult; // The result of division
+  wire division_remainder; // Determine whether the instruction is division and remiander or multiply
+  wire remainder; // Determine whether the instruction is remainder
+  wire [31:0] mul_div_rmdResult; // The final result of multiplication, division, and remainder
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Add or Sub (branch and slt also needs)
@@ -46,9 +46,9 @@ module ALU(
   // aluop[2:0] 111 => a AND b
   // aluop[2:0] 110 => a OR b
   // aluop[2:0] 100 => a XOR b
-  assign logicResult = (aluop[2:0] == 2'b111) ? a & b :
-                       (aluop[2:0] == 2'b110) ? a | b :
-                       (aluop[2:0] == 2'b100) ? a ^ b :
+  assign logicResult = (aluop[2:0] == 3'b111) ? a & b :
+                       (aluop[2:0] == 3'b110) ? a | b :
+                       (aluop[2:0] == 3'b100) ? a ^ b :
                                                     0 ;
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,9 +56,9 @@ module ALU(
   // aluop[2:0] 101 & aluop[3] 1 => logical right shift
   // aluop[2:0] 001 => logical left shift
   // aluop[2:0] 101 & aluop[3] 0 => arithmatic right shift
-  assign shiftResult = (aluop[2:0] == 2'b101 & aluop[3]) ? a >> b[4:0] :
-                       (aluop[2:0] == 2'b001) ? a << b[4:0] :
-                       (aluop[2:0] == 2'b101 & !aluop[3]) ? a >>> b[4:0] :
+  assign shiftResult = (aluop[2:0] == 3'b101 & aluop[3]) ? a >> b[4:0] :
+                       (aluop[2:0] == 3'b001) ? a << b[4:0] :
+                       (aluop[2:0] == 3'b101 & !aluop[3]) ? a >>> b[4:0] :
                        0 ;
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
