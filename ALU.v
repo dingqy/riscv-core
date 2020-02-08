@@ -3,7 +3,9 @@ module ALU(
   input [31:0] b,
   input [10:0] aluop,
   output [31:0] result,
-  output branchCmp
+  output branchCmp,
+  output zero_divison,
+  output overflow_signed_div
 );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,6 +26,14 @@ module ALU(
   wire overflow; // The overflow bit
   wire numberCmp; // The result of two signed numbers comparison
   wire branchEqual; // The result of whether two numbers are equal
+  wire signed [31:0] multiply1_signed;
+  wire signed [31:0] multiply2_signed;
+  wire overflow_div;
+  wire zero_div;
+  wire [31:0] divResult;
+  wire division_remainder;
+  wire remainder;
+  wire [31:0] mul_div_rmdResult;
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Add or Sub (branch and slt also needs)
@@ -47,9 +57,9 @@ module ALU(
   // aluop[2:0] 001 => logical left shift
   // aluop[2:0] 101 & aluop[3] 0 => arithmatic right shift
   assign shiftResult = (aluop[2:0] == 2'b101 & aluop[3]) ? a >> b[4:0] :
-                                  (aluop[2:0] == 2'b001) ? a << b[4:0] :
-                     (aluop[2:0] == 2'b101 & !aluop[3]) ? a >>> b[4:0] :
-                                                                     0 ;
+                       (aluop[2:0] == 2'b001) ? a << b[4:0] :
+                       (aluop[2:0] == 2'b101 & !aluop[3]) ? a >>> b[4:0] :
+                       0 ;
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Branch operation (a < b for signed and unsigned, directly connect to the funct3)
@@ -84,12 +94,49 @@ module ALU(
   // aluop[4] 1 => JALR instruction
   assign addResult = (aluop[4]) ? {addResult[31:1], 1'b0} : addResult;
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+  // Multiply operation (May have problems)
+  // aluop[2:0] 000 => MUL (two signed multiplication with lower 32 bits)
+  // aluop[2:0] 001 => MUL (two signed multiplication with higher 32 bits)
+  // aluop[2:0] 010 => MUL (signed (rs1) and unsigned (rs2) multiplication with higher 32 bits)
+  // aluop[2:0] 011 => MUL (two unsigned multiplication with higher 32 bits)
+  assign multiply1_signed = a;
+  assign multiply2_signed = b;
+  assign multiplyResult = (aluop[1:0] == 2'b00) ? multiply1_signed * multiply2_signed :
+                          (aluop[1:0] == 2'b01) ? ((multiply1_signed * multiply2_signed) >> 32) :
+                          (aluop[1:0] == 2'b10) ? ((multiply1_signed * b) >> 32) :
+                          (aluop[1:0] == 2'b11) ? ((a * b) >> 32) :
+                          0 ;
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+  // Multiply operation (May have problems)
+  // Warning: It may be replaced by proper IP core if the speed of what is synthesized is too low.  
+  // aluop[2:0] 100 => DIV (two signed division)
+  // aluop[2:0] 101 => DIVU (two unsigned division)
+  assign division_remainder = aluop[2];
+  assign divideResult = a / b;
+  assign zero_div = (divideResult === 32'bX) ? 1 : 0;
+  assign overflow_div = (a[31] & b[31]) & !(a[30:0] & b[30:0]);
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+  // Multiply operation (May have problems)
+  // aluop[2:0] 110 => REM (two signed division)
+  // aluop[2:0] 111 => REMU (two unsigned division)  
+  assign remainder = division_remainder & aluop[1];
+  assign remainderResult = a % b;
+
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Final Result
+  assign mul_div_rmdResult = (!division_remainder) ? multiplyResult :
+                             (remainder) ? remainderResult :
+                             divideResult;
   assign result = (aluop[8]) ? shiftResult :
                   (aluop[7]) ? logicResult :
-                    (aluop[5]) ? sltResult :
-                                 addResult ;
+                  (aluop[6]) ? mul_div_rmdResult :
+                  (aluop[5]) ? sltResult :
+                  addResult ;
   assign branchCmp = branchResult;
+  assign zero_divison = zero_div;
+  assign overflow_signed_div = overflow_div;
 
 endmodule // 

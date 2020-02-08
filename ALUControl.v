@@ -37,7 +37,6 @@ module ALUControl(
   assign logicalOrArith = !funct7[5];
   assign sltOp = i_r_type & (funct3 == 3'b010 | funct3 == 3'b011);
               
-
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Set the first five bits about instruction type
   assign controlResult = {addOp, branch, shiftOp, logicalOp, mulOp, sltOp, jalr, logicalOrArith, funct3};
