@@ -5,6 +5,7 @@ module ALUControl(
   output [10:0] controlResult
 );
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   wire branch; // Branch instructions
   wire loadOrStore; // Load or Store instructions
   wire i_type; // I-type instruction
@@ -19,7 +20,7 @@ module ALUControl(
   wire sltOp; // SLT/SLTU Instruction
   wire logicalOrArith; // Logical shift or arithmatic shift
 
-
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // The type of the instructions
   assign jump = aluop[6] & !aluop[2];
   assign branch = aluop[6] & aluop[2];
@@ -37,6 +38,7 @@ module ALUControl(
   assign sltOp = i_r_type & (funct3 == 3'b010 | funct3 == 3'b011);
               
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Set the first five bits about instruction type
   assign controlResult = {addOp, branch, shiftOp, logicalOp, mulOp, sltOp, jalr, logicalOrArith, funct3};
 

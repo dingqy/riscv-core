@@ -6,6 +6,7 @@ module ALU(
   output branchCmp
 );
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // aluop: from ALUControl 
   // aluop[10] : add / aluop[9] : branch / aluop[8] : shift / aluop[7] : logic / aluop[6] : mul/div / aluop[5] : slt/sltu
   wire [31:0] addResult; // The result of add and sub operation
@@ -24,11 +25,13 @@ module ALU(
   wire numberCmp; // The result of two signed numbers comparison
   wire branchEqual; // The result of whether two numbers are equal
   
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Add or Sub (branch and slt also needs)
   assign n_b = ~b;
   assign addOrSub = (aluop[10]) ? b : n_b;
   assign {overflow, addResult} = a + addOrSub;
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Logic operation 
   // aluop[2:0] 111 => a AND b
   // aluop[2:0] 110 => a OR b
@@ -38,6 +41,7 @@ module ALU(
                        (aluop[2:0] == 2'b100) ? a ^ b :
                                                     0 ;
   
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Shift 
   // aluop[2:0] 101 & aluop[3] 1 => logical right shift
   // aluop[2:0] 001 => logical left shift
@@ -47,6 +51,7 @@ module ALU(
                      (aluop[2:0] == 2'b101 & !aluop[3]) ? a >>> b[4:0] :
                                                                      0 ;
   
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Branch operation (a < b for signed and unsigned, directly connect to the funct3)
   // aluop[2:0] 000 => BEQ
   // aluop[2:0] 001 => BNE
@@ -65,18 +70,21 @@ module ALU(
                         (aluop[2:0] == 3'b110) ? unsignedBranch :
                         (aluop[2:0] == 3'b111) ? !unsignedBranch :
                                                                 0 ;
-                                                          
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////                                                        
   // SLT / SLTU operation
   // aluop[0] 0 => signed comparison
   // aluop[0] 1 => unsigned comparison
   assign sltResult = (numberCmp & !aluop[0]) ? 1'b1 :
                      (unsignedBranch & aluop[0]) ? 1'b1 :
                                                       0 ;
-    
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////  
   // JALR operation
   // aluop[4] 1 => JALR instruction
   assign addResult = (aluop[4]) ? {addResult[31:1], 1'b0} : addResult;
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Final Result
   assign result = (aluop[8]) ? shiftResult :
                   (aluop[7]) ? logicResult :
