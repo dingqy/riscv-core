@@ -4,7 +4,7 @@ module ALU(
   input [10:0] aluop,
   output [31:0] result,
   output branchCmp,
-  output zero_divison,
+  output zero_division,
   output overflow_signed_div
 );
 
@@ -39,7 +39,7 @@ module ALU(
   // Add or Sub (branch and slt also needs)
   assign n_b = ~b;
   assign addOrSub = (aluop[10]) ? b : n_b;
-  assign {overflow, addResult} = a + addOrSub;
+  assign {overflow, addResult} = a + addOrSub + !aluop[10];
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Logic operation 
@@ -58,7 +58,7 @@ module ALU(
   // aluop[2:0] 101 & aluop[3] 0 => arithmatic right shift
   assign shiftResult = (aluop[2:0] == 3'b101 & aluop[3]) ? a >> b[4:0] :
                        (aluop[2:0] == 3'b001) ? a << b[4:0] :
-                       (aluop[2:0] == 3'b101 & !aluop[3]) ? a >>> b[4:0] :
+                       (aluop[2:0] == 3'b101 & !aluop[3]) ? ($signed(a)) >>> b[4:0] :
                        0 ;
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ module ALU(
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////  
   // Multiply operation (May have problems)
-  // Warning: It may be replaced by proper IP core if the speed of what is synthesized is too low.  
+  // Warning: It may be replaced by proper IP core if the speed of which is synthesized is too low.  
   // aluop[2:0] 100 => DIV (two signed division)
   // aluop[2:0] 101 => DIVU (two unsigned division)
   assign division_remainder = aluop[2];
@@ -136,7 +136,7 @@ module ALU(
                   (aluop[5]) ? sltResult :
                   addResult ;
   assign branchCmp = branchResult;
-  assign zero_divison = zero_div;
+  assign zero_division = zero_div;
   assign overflow_signed_div = overflow_div;
 
 endmodule // 
