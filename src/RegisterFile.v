@@ -16,16 +16,18 @@ integer i;
 assign RD1 = Register[A1];
 assign RD2 = Register[A2];
 
-always @ (posedge RESET)
+always @ (posedge CLK, posedge RESET)
 begin
-  for (i = 0; i < 32; i = i + 1) begin
-    Register[i] <= 32'b0;
+  if (RESET) 
+  begin
+    for (i = 0; i < 32; i = i + 1) 
+    begin
+      Register[i] <= 32'b0;
+    end
   end
-end
-
-always @ (posedge CLK)
-begin
-  if (RegWrite) Register[A3] <= WD3;
+  else begin
+      if (RegWrite) Register[A3] <= WD3;
+  end
 end
 
 endmodule // 

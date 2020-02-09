@@ -11,6 +11,7 @@ module ALU(
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // aluop: from ALUControl 
   // aluop[10] : add / aluop[9] : branch / aluop[8] : shift / aluop[7] : logic / aluop[6] : mul/div / aluop[5] : slt/sltu
+  // All the result of operations
   wire [31:0] addResult; // The result of add and sub operation
   wire [31:0] shiftResult; // The result of shift operation
   wire [31:0] logicResult; // The result of logic operation
@@ -19,27 +20,48 @@ module ALU(
   wire [31:0] remainderResult; // The result of remainder operation
   wire [31:0] sltResult; // The result of slt operation
   wire branchResult; // The result of branch operation
-  wire unsignedBranch_MSB; // Unsigned number comparison between the most siginificant bit
-  wire unsignedBranch; // The result of unsigned comparison
-  wire [31:0] n_b; // Negate b (used for sub operation)
-  wire [31:0] addOrSub; // Choose whether the operation is add or sub
-  wire overflow; // The overflow bit
-  wire numberCmp; // The result of two signed numbers comparison
-  wire branchEqual; // The result of whether two numbers are equal
-  wire signed [31:0] multiply1_signed; // Signed number of a
-  wire signed [31:0] multiply2_signed; // Signed number of b
+  wire [31:0] mul_div_rmdResult; // The final result of multiplication, division, and remainder
   wire overflow_div; // If a is -2^(L-1) and b is -1, it will overflow
   wire zero_div; // Divide Zero Exception
-  wire [31:0] divResult; // The result of division
+  wire [31:0] jalr;
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Temp value
+  wire [32:0] addResult_temp_signed;
+  wire [31:0] n_b; // Negate b (used for sub operation)
+  wire [31:0] addOrSub; // Choose whether the operation is add or sub
+  wire signed [31:0] a_signed; // Signed number of a
+  wire signed [31:0] b_signed; // Signed number of b
+  wire unsignedBranch_MSB; // Unsigned number comparison between the most siginificant bit
+  wire unsignedBranch; // The result of unsigned comparison
+  wire numberCmp; // The result of two signed numbers comparison
+  wire branchEqual; // The result of whether two numbers are equal
+  wire overflow_signed;
+  wire signed [63:0] multiply_signed;
+  wire [63:0] multiply;
+  wire signed [31:0] division_signed;
+  wire [31:0] division;
+  wire [31:0] remainder_signed;
+  wire [31:0] remainder_unsigned;
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Control Logic
   wire division_remainder; // Determine whether the instruction is division and remiander or multiply
   wire remainder; // Determine whether the instruction is remainder
-  wire [31:0] mul_div_rmdResult; // The final result of multiplication, division, and remainder
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Initialization
+  assign a_signed = a;
+  assign b_signed = b;
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Add or Sub (branch and slt also needs)
-  assign n_b = ~b;
+  assign n_b = -b;
   assign addOrSub = (aluop[10]) ? b : n_b;
-  assign {overflow, addResult} = a + addOrSub + !aluop[10];
+  assign addResult_temp_signed = {a[31], a[31:0]} + {addOrSub[31], addOrSub[31:0]};
+  assign overflow_signed = addResult_temp_signed[32] ^ addResult_temp_signed[31];
+  assign addResult = addResult_temp_signed[31:0];
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Logic operation 
@@ -56,9 +78,11 @@ module ALU(
   // aluop[2:0] 101 & aluop[3] 1 => logical right shift
   // aluop[2:0] 001 => logical left shift
   // aluop[2:0] 101 & aluop[3] 0 => arithmatic right shift
+  wire [31:0] shiftResult_signed;
+  assign shiftResult_signed = ($signed(a)) >>> b[4:0];
   assign shiftResult = (aluop[2:0] == 3'b101 & aluop[3]) ? a >> b[4:0] :
                        (aluop[2:0] == 3'b001) ? a << b[4:0] :
-                       (aluop[2:0] == 3'b101 & !aluop[3]) ? ($signed(a)) >>> b[4:0] :
+                       (aluop[2:0] == 3'b101 & !aluop[3]) ? shiftResult_signed :
                        0 ;
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,12 +95,12 @@ module ALU(
   // aluop[2:0] 111 => BGEU
   assign branchEqual = !addResult;
   assign unsignedBranch_MSB = a[31] ^ b[31];
-  assign numberCmp = overflow | addResult[31];
+  assign numberCmp = overflow_signed ^ addResult[31];
   assign unsignedBranch = (unsignedBranch_MSB & b[31]) | (!unsignedBranch_MSB & numberCmp);
   assign branchResult = (aluop[2:0] == 3'b000) ? branchEqual :
                         (aluop[2:0] == 3'b001) ? !branchEqual :
                         (aluop[2:0] == 3'b100) ? numberCmp :
-                        (aluop[2:0] == 3'b101) ? numberCmp :
+                        (aluop[2:0] == 3'b101) ? !numberCmp :
                         (aluop[2:0] == 3'b110) ? unsignedBranch :
                         (aluop[2:0] == 3'b111) ? !unsignedBranch :
                                                                 0 ;
@@ -92,7 +116,7 @@ module ALU(
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////  
   // JALR operation
   // aluop[4] 1 => JALR instruction
-  assign addResult = (aluop[4]) ? {addResult[31:1], 1'b0} : addResult;
+  assign jalr = {addResult[31:1], 1'b0};
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////  
   // Multiply operation (May have problems)
@@ -100,30 +124,34 @@ module ALU(
   // aluop[2:0] 001 => MUL (two signed multiplication with higher 32 bits)
   // aluop[2:0] 010 => MUL (signed (rs1) and unsigned (rs2) multiplication with higher 32 bits)
   // aluop[2:0] 011 => MUL (two unsigned multiplication with higher 32 bits)
-  assign multiply1_signed = a;
-  assign multiply2_signed = b;
-  assign multiplyResult = (aluop[1:0] == 2'b00) ? multiply1_signed * multiply2_signed :
-                          (aluop[1:0] == 2'b01) ? ((multiply1_signed * multiply2_signed) >> 32) :
-                          (aluop[1:0] == 2'b10) ? ((multiply1_signed * b) >> 32) :
-                          (aluop[1:0] == 2'b11) ? ((a * b) >> 32) :
+  assign multiply_signed = a_signed * b_signed;
+  assign multiply = a * b;
+  assign multiplyResult = (aluop[1:0] == 2'b00) ? multiply_signed[31:0] :
+                          (aluop[1:0] == 2'b01) ? multiply_signed[63:32] :
+                          (aluop[1:0] == 2'b10) ? (a_signed * b) >> 32 :
+                          (aluop[1:0] == 2'b11) ? multiply[63:32] :
                           0 ;
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////  
-  // Multiply operation (May have problems)
+  // Division operation (May have problems)
   // Warning: It may be replaced by proper IP core if the speed of which is synthesized is too low.  
   // aluop[2:0] 100 => DIV (two signed division)
   // aluop[2:0] 101 => DIVU (two unsigned division)
   assign division_remainder = aluop[2];
-  assign divideResult = a / b;
+  assign division = a / b;
+  assign division_signed = a_signed / b_signed;
+  assign divideResult = (aluop[0]) ? division : division_signed;
   assign zero_div = (divideResult === 32'bX) ? 1 : 0;
   assign overflow_div = (a[31] & b[31]) & !(a[30:0] & b[30:0]);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////  
-  // Multiply operation (May have problems)
+  // Remainder operation (May have problems)
   // aluop[2:0] 110 => REM (two signed division)
   // aluop[2:0] 111 => REMU (two unsigned division)  
   assign remainder = division_remainder & aluop[1];
-  assign remainderResult = a % b;
+  assign remainder_unsigned = a % b;
+  assign remainder_signed = a_signed % b_signed;
+  assign remainderResult = (aluop[0]) ? remainder_unsigned : remainder_signed;
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Final Result
@@ -134,6 +162,7 @@ module ALU(
                   (aluop[7]) ? logicResult :
                   (aluop[6]) ? mul_div_rmdResult :
                   (aluop[5]) ? sltResult :
+                  (aluop[4]) ? jalr :
                   addResult ;
   assign branchCmp = branchResult;
   assign zero_division = zero_div;

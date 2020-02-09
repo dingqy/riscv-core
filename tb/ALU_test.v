@@ -17,6 +17,10 @@ module ALU_test;
   reg exp_branchCmp;
   reg exp_zero_division;
   reg exp_overflow_signed_div;
+  reg [31:0] test_add;
+  reg [31:0] test_a;
+  reg [31:0] test_b;
+  reg overflow_test;
 
   reg [10:0] vec_cnt, err_cnt;
 
@@ -32,6 +36,9 @@ module ALU_test;
     $readmemh("C:/Users/80939/Desktop/ELEC222-Project/riscv-soc/riscv-core/tb/ALU_test_vectors_hex.txt",testvec); 
     err_cnt = 0;
     vec_cnt = 0;
+    test_add = 0;
+    test_a = 1;
+    test_b = 0;
   end
 
   always @ (posedge clk)
@@ -47,6 +54,8 @@ module ALU_test;
     exp_overflow_signed_div = testvec[vec_cnt][0];
 
     #60;
+
+    {overflow_test, test_add} = test_a + ~test_b + 1'b1;
 
     if (aluop[6]) 
     begin
