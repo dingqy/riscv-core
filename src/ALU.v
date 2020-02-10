@@ -114,7 +114,7 @@ module ALU(
                                                       0 ;
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////  
-  // JALR operation
+  // JALR operation (Can be deleted)
   // aluop[4] 1 => JALR instruction
   assign jalr = {addResult[31:1], 1'b0};
 
