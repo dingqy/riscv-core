@@ -8,7 +8,9 @@ module ControlUnit(
   output JumpSrc,
   output MemtoReg,
   output Branch,
-  output ALUSrc,
+  output [1:0] ALUSrcB,
+  output ALUResult,
+  output ALUSrcA,
   output [1:0] RegSrc,
   output [2:0] LoadOrStoreTYPE,
   output [6:0] OP_output,
@@ -26,6 +28,11 @@ module ControlUnit(
   wire OP_JTYPE; // J-type instruction
   wire OP_JALR; // JALR instruction
   wire OP_Load; // Load instruction
+  wire OP_AUIPC; // AUIPC instruction
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Temp value
+  // wire OP_AUIPC_JALR;
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Determine the instruction type and some specfic instrution (ECALL/FENCE/EBREAK aren't included)
@@ -37,6 +44,7 @@ module ControlUnit(
   assign OP_RTYPE = !(OP_BTYPE | OP_ITYPE | OP_JTYPE | OP_STYPE | OP_UTYPE);
   assign OP_JALR = OP[6] & OP[2] & !OP[3];
   assign OP_Load = OP_ITYPE & !OP[4];
+  assign OP_AUIPC = OP_UTYPE & !OP[5];
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Generate control bit based on instruction type
@@ -44,9 +52,17 @@ module ControlUnit(
   //  U-type: RegSrc => 00       Data: {immediate, 12'b0}
   //  J-type/JALR: RegSrc => 01       Data: PC + 4
   //  Other instruction: RegSrc => 10       Data: result
-  // ALUSrc:
-  //  I-type: ALUSrc => 1       Data: immediate (signed extended)
-  //  Other: ALUSrc => 0       Data: rs2
+  // ALUSrcB:
+  //  AUIPC: ALUSrcB => 01       Data: immediate[31:12] (signed extended)
+  //  JAL: ALUSrcB => 10       Data: immediate[20][10:1][11][19:12] (signed extended)
+  //  I-type: ALUSrcB => 11       Data: immediate[11:0] (signed extended)
+  //  Other: ALUSrcB => 00       Data: rs2
+  // ALUSrcA:
+  //  JAL/AUIPC: ALUSrcA => 0       Data: PC (for JAL/AUIPC instruction)
+  //  Other: ALUSrcA => 1       Data: rs1
+  // ALUResult:
+  //  LUI: ALUResult => 0       Data: immediate[31:12] (signed extended)
+  //  Other: ALUResult => 1       Data: ALUresult
   // Branch:
   //  B-type: Branch => 1
   //  Other: Branch => 0
@@ -62,7 +78,7 @@ module ControlUnit(
   // MemtoReg:
   //  Load: MemtoReg => 1
   //  Other: MemtoReg => 0;
-  // LoadOrStoreTYPE:
+  // LoadOrStoreTYPE (used for differenet lw/sw bit operations):
   //  LoadOrStoreTYPE => Funct3
   // MemWrite:
   //  S-type: MemWrite => 1
@@ -71,17 +87,22 @@ module ControlUnit(
   assign RegSrc = (OP_UTYPE) ? 2'b00 : 
                   (OP_JTYPE | OP_JALR) ? 2'b01 :
                   2'b10 ;
-  assign ALUSrc = OP_ITYPE;
+  assign ALUSrcB = OP_ITYPE;
   assign Branch = OP_BTYPE;
   assign RegWrite = !(OP_BTYPE | OP_STYPE);
   assign Jump = OP_JTYPE | OP_JALR;
-  assign OP_output = OP;
-  assign Funct3_output = Funct3;
-  assign Funct7_output = Funct7;
+  assign OP_output = OP;  // Used for ALUControl
+  assign Funct3_output = Funct3;  // Used for ALUControl
+  assign Funct7_output = Funct7; // Used for ALUControl
   assign LoadOrStoreTYPE = Funct3;
   assign MemtoReg = OP_Load;
   assign MemWrite = OP_STYPE;
   assign JumpSrc = OP_JTYPE;
-
+  assign ALUSrcA = !(OP_JTYPE | OP_AUIPC);
+  assign ALUSrcB = (OP_AUIPC) ? 2'b01 :
+                   (OP_JTYPE) ? 2'b10 :
+                   (OP_ITYPE) ? 2'b11 :
+                   2'b00;
+  assign ALUResult = OP_UTYPE & !OP_AUIPC;
 endmodule //
 
