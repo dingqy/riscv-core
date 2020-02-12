@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<wave_config>
+	<wave_state>
+	</wave_state>
+	<db_ref_list>
+		<db_ref path="C:/Users/80939/Desktop/ELEC222-Project/riscv-soc/riscv-core/vivado_project/vivado_project.hw/hw_1/wave/hw_ila_data_2/hw_ila_data_2.wdb" id="1" type="auto">
+			<top_modules>
+				<top_module name="top">
+				</top_module>
+			</top_modules>
+		</db_ref>
+	</db_ref_list>
+	<WVObjectSize size="5">
+	</WVObjectSize>
+	<wvobject fp_name="A1_IBUF" type="array" db_ref_id="1">
+		<obj_property name="ElementShortName">A1_IBUF[3:1]</obj_property>
+		<obj_property name="ObjectShortName">A1_IBUF[3:1]</obj_property>
+		<obj_property name="DisplayName">FullPathName</obj_property>
+		<obj_property name="Radix">HEXRADIX</obj_property>
+	</wvobject>
+	<wvobject fp_name="WD1_IBUF" type="array" db_ref_id="1">
+		<obj_property name="ElementShortName">WD1_IBUF[3:0]</obj_property>
+		<obj_property name="ObjectShortName">WD1_IBUF[3:0]</obj_property>
+		<obj_property name="DisplayName">FullPathName</obj_property>
+		<obj_property name="Radix">HEXRADIX</obj_property>
+	</wvobject>
+	<wvobject fp_name="ram_output_OBUF" type="array" db_ref_id="1">
+		<obj_property name="ElementShortName">ram_output_OBUF[3:0]</obj_property>
+		<obj_property name="ObjectShortName">ram_output_OBUF[3:0]</obj_property>
+		<obj_property name="DisplayName">FullPathName</obj_property>
+		<obj_property name="Radix">HEXRADIX</obj_property>
+	</wvobject>
+	<wvobject fp_name="ram_cen_IBUF" type="logic" db_ref_id="1">
+		<obj_property name="ElementShortName">ram_cen_IBUF</obj_property>
+		<obj_property name="ObjectShortName">ram_cen_IBUF</obj_property>
+		<obj_property name="DisplayName">FullPathName</obj_property>
+		<obj_property name="Radix">HEXRADIX</obj_property>
+	</wvobject>
+	<wvobject fp_name="ram_oen_IBUF" type="logic" db_ref_id="1">
+		<obj_property name="ElementShortName">ram_oen_IBUF</obj_property>
+		<obj_property name="ObjectShortName">ram_oen_IBUF</obj_property>
+		<obj_property name="DisplayName">FullPathName</obj_property>
+		<obj_property name="Radix">HEXRADIX</obj_property>
+	</wvobject>
+</wave_config>
+

@@ -1,0 +1,15 @@
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
+|       Launch Clock       |      Capture Clock       |                                                 Pin                                                      |
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
+|                  sys_clk |                clk_pll_i |                                                                                 ram/ram_dq_i_int_reg[2]/D|
+|                  sys_clk |                clk_pll_i |                                                                                 ram/ram_dq_i_int_reg[9]/D|
+|                  sys_clk |                clk_pll_i |                                                                                    ram/ram_a_int_reg[7]/D|
+|                  sys_clk |                clk_pll_i |                                                                                     ram/ram_cen_int_reg/D|
+|                  sys_clk |                clk_pll_i |                                                                                     ram/ram_wen_int_reg/D|
+|                  sys_clk |                clk_pll_i |                                                                                ram/ram_dq_i_int_reg[14]/D|
+|                  sys_clk |                clk_pll_i |                                                                                    ram/ram_a_int_reg[9]/D|
+|                  sys_clk |                clk_pll_i |                                                                                    ram/ram_a_int_reg[3]/D|
+|                  sys_clk |                clk_pll_i |                                                                                   ram/ram_a_int_reg[22]/D|
+|                  sys_clk |                clk_pll_i |                                                                                     ram/ram_oen_int_reg/D|
+|                  sys_clk |                clk_pll_i |                                                                                ram/ram_dq_i_int_reg[12]/D|
++--------------------------+--------------------------+----------------------------------------------------------------------------------------------------------+
