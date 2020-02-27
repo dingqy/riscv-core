@@ -90,7 +90,7 @@ module ControlUnit(
   assign LoadOrStoreTYPE = Funct3;
   assign MemtoReg = OP_Load;
   assign MemWrite = OP_STYPE;
-  assign JumpSrc = OP_JTYPE;
+  assign JumpSrc = OP_JTYPE; // unknown
   assign ALUSrcA = !(OP_JTYPE | OP_AUIPC);
   assign ALUSrcB = (OP_UTYPE) ? 2'b01 :
                    (OP_JTYPE) ? 2'b10 :

@@ -9,13 +9,18 @@ module EX_MEM_Register(
   input zero_division_i,
   input overflow_signed_div_i,
   input [4:0] RegDst_i,
+  input [31:0] PC_i,
+  input [31:0] U_type_immediate_i,
   output [4:0] WB_control,
   output [31:0] ALUResult,
   output [31:0] StoreData,
   output branchCmp,
   output zero_division,
   output overflow_signed_div,
-  output [4:0] RegDst
+  output [4:0] RegDst,
+  output [31:0] PC,
+  output [31:0] U_type_immediate,
+  output [31:0] MEM_control
 );
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,6 +31,8 @@ module EX_MEM_Register(
   reg zero_division_r;
   reg [4:0] RegDst_r;
   reg overflow_signed_div_r;
+  reg [31:0] PC_r;
+  reg [31:0] U_type_immediate_r;
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // The Control logic which is necessary for further operation in pipeline
@@ -57,6 +64,8 @@ module EX_MEM_Register(
       zero_division_r <= 1'b0;
       overflow_signed_div_r <= 1'b0;
       RegDst_r <= 5'b0;
+      PC_r <= 32'b0;
+      U_type_immediate_r <= 32'b0;
     end
     else begin
       MEM_control_r <= MEM_control_i;
@@ -67,6 +76,8 @@ module EX_MEM_Register(
       zero_division_r <= zero_division_i;
       overflow_signed_div_r <= overflow_signed_div_i;
       RegDst_r <= RegDst_i;
+      PC_r <= PC_i;
+      U_type_immediate_r <= U_type_immediate_i;
     end
   end
 
@@ -78,5 +89,8 @@ module EX_MEM_Register(
   assign zero_division = zero_division_r;
   assign overflow_signed_div = overflow_signed_div_r;
   assign RegDst = RegDst_r;
+  assign PC = PC_r;
+  assign U_type_immediate = U_type_immediate_r;
+  assign MEM_control = MEM_control_r;
 
 endmodule // 
