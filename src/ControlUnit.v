@@ -2,17 +2,10 @@ module ControlUnit(
   input [6:0] OP,
   input [2:0] Funct3,
   input [6:0] Funct7,
-  output RegWrite,
-  output MemWrite,
-  output Jump,
-  output JumpSrc,
-  output MemtoReg,
-  output Branch,
-  output [1:0] ALUSrcB,
-  output ALUResult,
-  output ALUSrcA,
-  output [1:0] RegSrc,
-  output [2:0] LoadOrStoreTYPE
+  output [20:0] EX_control,
+  output [5:0] MEM_control,
+  output [4:0] WB_control,
+  output ALUSrcB_S_type
 );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +39,6 @@ module ControlUnit(
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Generate control bit based on instruction type
   // RegSrc:
-  //  U-type: RegSrc => 00       Data: {immediate, 12'b0} (has been extended)
   //  J-type/JALR: RegSrc => 01       Data: PC + 4
   //  Other instruction: RegSrc => 10       Data: result
   // ALUSrcB:
@@ -90,12 +82,17 @@ module ControlUnit(
   assign LoadOrStoreTYPE = Funct3;
   assign MemtoReg = OP_Load;
   assign MemWrite = OP_STYPE;
-  assign JumpSrc = OP_JTYPE; // unknown
   assign ALUSrcA = !(OP_JTYPE | OP_AUIPC);
   assign ALUSrcB = (OP_UTYPE) ? 2'b01 :
                    (OP_JTYPE) ? 2'b10 :
                    (OP_ITYPE) ? 2'b11 :
                    2'b00;
   assign ALUResult = !(OP_UTYPE & !OP_AUIPC);
+
+  // The control logic
+  assign EX_control = {OP, Funct3, Funct7, ALUSrcA, ALUSrcB, ALUResult};
+  assign MEM_control = {MemWrite, Jump, 1'b0, Branch, LoadOrStoreTYPE};
+  assign WB_control = {RegWrite, MemtoReg, RegSrc};
+  assign ALUSrcB_S_type = OP_STYPE;
 endmodule //
 

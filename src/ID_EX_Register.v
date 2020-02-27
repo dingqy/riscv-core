@@ -7,24 +7,26 @@ module ID_EX_Register(
   input [5:0] MEM_control_i,
   input [4:0] WB_control_i,
   input [31:0] U_type_immediate_i,
-  input [31:0] JAL_immediate_i,
+  input [31:0] J_type_immediate_i,
   input [31:0] I_type_immediate_i,
   input [31:0] B_type_immediate_i,
   input [31:0] S_type_immediate_i,
   input [4:0] RegDst_i,
   input [31:0] PC_i,
+  input ALUSrcB_S_type_i,
   output [20:0] EX_control,
   output [5:0] MEM_control,
   output [4:0] WB_control,
   output [31:0] U_type_immediate,
-  output [31:0] JAL_immediate,
+  output [31:0] J_type_immediate,
   output [31:0] I_type_immediate,
   output [4:0] RegDst,
   output [31:0] PC,
   output [31:0] SrcA,
   output [31:0] SrcB,
   output [31:0] B_type_immediate,
-  output [31:0] S_type_immediate
+  output [31:0] S_type_immediate,
+  output ALUSrcB_S_type
 );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,10 +36,11 @@ module ID_EX_Register(
   reg [31:0] PC_r;
   reg [31:0] I_type_immediate_r;
   reg [31:0] U_type_immediate_r;
-  reg [31:0] JAL_immediate_r;
+  reg [31:0] J_type_immediate_r;
   reg [4:0] RegDst_r;
   reg [31:0] S_type_immediate_r;
   reg [31:0] B_type_immediate_r;
+  reg ALUSrcB_S_type_r;
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // The Control logic which is necessary for further operation in pipeline
@@ -74,7 +77,7 @@ module ID_EX_Register(
       PC_r <= 32'b0;
       I_type_immediate_r <= 32'b0;
       U_type_immediate_r <= 32'b0;
-      JAL_immediate_r <= 32'b0;
+      J_type_immediate_r <= 32'b0;
       SrcB_r <= 32'b0;
       RegDst_r <= 5'b0;
       EX_control_r <= 21'b0;
@@ -82,13 +85,14 @@ module ID_EX_Register(
       WB_control_r <= 5'b0;
       S_type_immediate_r <= 32'b0;
       B_type_immediate_r <= 32'b0;
+      ALUSrcB_S_type_r <= 1'b0;
     end
     else begin
       SrcA_r <= SrcA_i;
       PC_r <= PC_i;
       I_type_immediate_r <= I_type_immediate_i;
       U_type_immediate_r <= U_type_immediate_i;
-      JAL_immediate_r <= JAL_immediate_i;
+      J_type_immediate_r <= J_type_immediate_i;
       SrcB_r <= SrcB_i;
       RegDst_r <= RegDst_i;
       EX_control_r <= EX_control_i;
@@ -96,6 +100,7 @@ module ID_EX_Register(
       WB_control_r <= WB_control_i;
       S_type_immediate_r <= S_type_immediate_i;
       B_type_immediate_r <= B_type_immediate_i;
+      ALUSrcB_S_type_r <= ALUSrcB_S_type_i;
     end
   end
 
@@ -103,7 +108,7 @@ module ID_EX_Register(
   assign PC = PC_r;
   assign I_type_immediate = I_type_immediate_r;
   assign U_type_immediate = U_type_immediate_r;
-  assign JAL_immediate = JAL_immediate_r;
+  assign J_type_immediate = J_type_immediate_r;
   assign SrcB = SrcB_r;
   assign RegDst = RegDst_r;
   assign EX_control = EX_control_r;
@@ -111,5 +116,6 @@ module ID_EX_Register(
   assign WB_control = WB_control_r;
   assign S_type_immediate = S_type_immediate_r;
   assign B_type_immediate = B_type_immediate_r;
+  assign ALUSrcB_S_type = ALUSrcB_S_type_r;
 
 endmodule // 
