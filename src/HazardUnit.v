@@ -18,14 +18,12 @@ module HazardUnit(
   output PCWriteEnable
 );
 
-  wire ALUSrcA_Reg;
-  wire ALUSrcB_Reg;
   wire Stall;
   wire RegAForward;
   wire RegBForward;
 
   assign RegAForward = (ALUSrcA == 1'b1);
-  assign RegBForward = (ALUSrcB_Reg == 2'b00);
+  assign RegBForward = (ALUSrcB == 2'b00);
 
   // If the instruction after load instruction read the register destination of former, the pipeline should be stall
   assign Stall = MemRead & ((RegSrcA_IF_ID == RegDst_ID_EX) | (RegSrcB_IF_ID == RegDst_ID_EX));

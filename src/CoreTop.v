@@ -220,7 +220,8 @@ module CoreTop(
     .RegisterRs1_i(Instr_IF_ID[19:15]),
     .RegisterRs2_i(Instr_IF_ID[24:20]),
     .RegisterRs1(RegisterRs1_ID_EX),
-    .RegisterRs2(RegisterRs2_ID_EX)
+    .RegisterRs2(RegisterRs2_ID_EX),
+    .Enable(WrtieEnable_IF_ID)
   );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,11 +237,11 @@ module CoreTop(
                       (ALUSrcB_S_type_ID_EX) ? SignImmediate_S_type_ID_EX :
                       SrcB_ID_EX;
   assign SrcAForwardResult = (ForwardA == 2'b01) ? ALUResult_EX_MEM :
-                             (ForwardA == 2'b10) ? WB_control_MEM_WB :
+                             (ForwardA == 2'b10) ? WBResult :
                              SrcAResult;
   assign SrcBForwardResult = (ForwardB == 2'b01) ? ALUResult_EX_MEM :
-                             (ForwardB == 2'b10) ? WB_control_MEM_WB :
-                             SrcAResult;
+                             (ForwardB == 2'b10) ? WBResult :
+                             SrcBResult;
                              
 
   // ALU control logic
