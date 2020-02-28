@@ -1,8 +1,8 @@
 module EX_MEM_Register(
   input CLK,
   input RESET,
-  input [5:0] MEM_control_i,
-  input [4:0] WB_control_i,
+  input [6:0] MEM_control_i,
+  input [3:0] WB_control_i,
   input [31:0] ALUResult_i,
   input [31:0] StoreData_i,
   input branchCmp_i,
@@ -11,7 +11,7 @@ module EX_MEM_Register(
   input [4:0] RegDst_i,
   input [31:0] PC_i,
   input [31:0] BranchTargetAddress_i,
-  output [4:0] WB_control,
+  output [3:0] WB_control,
   output [31:0] ALUResult,
   output [31:0] StoreData,
   output branchCmp,
@@ -19,7 +19,7 @@ module EX_MEM_Register(
   output overflow_signed_div,
   output [4:0] RegDst,
   output [31:0] PC,
-  output [31:0] MEM_control,
+  output [6:0] MEM_control,
   output [31:0] BranchTargetAddress
 );
 
@@ -50,14 +50,14 @@ module EX_MEM_Register(
   //  ------------------------------------
   //  | RegWrite |  MemtoReg  |  RegSrc  |
   //  ------------------------------------
-  reg [5:0] MEM_control_r;
-  reg [4:0] WB_control_r;
+  reg [6:0] MEM_control_r;
+  reg [3:0] WB_control_r;
 
 
   always @ (posedge CLK, negedge RESET) begin
     if (!RESET) begin
-      MEM_control_r <= 6'b0;
-      WB_control_r <= 5'b0;
+      MEM_control_r <= 7'b0;
+      WB_control_r <= 4'b0;
       ALUResult_r <= 32'b0;
       StoreData_r <= 32'b0;
       branchCmp_r <= 1'b0;

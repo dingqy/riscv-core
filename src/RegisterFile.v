@@ -16,9 +16,9 @@ integer i;
 assign RD1 = Register[A1];
 assign RD2 = Register[A2];
 
-always @ (posedge CLK, posedge RESET)
+always @ (posedge CLK, negedge RESET)
 begin
-  if (RESET) 
+  if (!RESET) 
   begin
     for (i = 0; i < 32; i = i + 1) 
     begin

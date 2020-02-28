@@ -1,10 +1,10 @@
 module MEM_WB_Register(
-  input [4:0] WB_control_i,
+  input [3:0] WB_control_i,
   input [4:0] RegDst_i,
   input [31:0] ReadData_i,
   input [31:0] ALUResult_i,
   input [31:0] PC_i,
-  output [4:0] WB_control,
+  output [3:0] WB_control,
   output [4:0] RegDst,
   output [31:0] ReadData,
   output [31:0] ALUResult,
@@ -30,11 +30,11 @@ module MEM_WB_Register(
   //  ------------------------------------
   //  | RegWrite |  MemtoReg  |  RegSrc  |
   //  ------------------------------------
-  reg [4:0] WB_control_r;
+  reg [3:0] WB_control_r;
 
   always @ (posedge CLK, negedge RESET) begin
     if (!RESET) begin
-      WB_control_r <= 5'b0;
+      WB_control_r <= 4'b0;
       RegDst_r <= 5'b0;
       ReadData_r <= 31'b0;
       ALUResult_r <= 31'b0;

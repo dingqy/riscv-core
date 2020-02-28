@@ -3,8 +3,8 @@ module ControlUnit(
   input [2:0] Funct3,
   input [6:0] Funct7,
   output [20:0] EX_control,
-  output [5:0] MEM_control,
-  output [4:0] WB_control,
+  output [6:0] MEM_control,
+  output [3:0] WB_control,
   output ALUSrcB_S_type
 );
 
@@ -23,6 +23,16 @@ module ControlUnit(
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Temp value
   // wire OP_AUIPC_JALR;
+  wire [1:0] RegSrc;
+  wire Branch;
+  wire RegWrite;
+  wire Jump;
+  wire [2:0] LoadOrStoreTYPE;
+  wire MemtoReg;
+  wire MemWrite;
+  wire ALUSrcA;
+  wire [1:0] ALUSrcB;
+  wire ALUResult;
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Determine the instruction type and some specfic instrution (ECALL/FENCE/EBREAK aren't included)
