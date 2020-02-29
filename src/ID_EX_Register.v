@@ -2,6 +2,7 @@ module ID_EX_Register(
   input CLK,
   input RESET,
   input Enable,
+  input flush,
   input [31:0] SrcA_i,
   input [31:0] SrcB_i,
   input [20:0] EX_control_i,
@@ -79,7 +80,7 @@ module ID_EX_Register(
 
 
   always @ (posedge CLK, negedge RESET) begin
-    if (!RESET) begin
+    if ((!RESET) | flush) begin
       SrcA_r <= 32'b0;
       PC_r <= 32'b0;
       I_type_immediate_r <= 32'b0;

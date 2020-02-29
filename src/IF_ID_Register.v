@@ -3,6 +3,7 @@ module IF_ID_Register(
   input CLK,
   input RESET,
   input [31:0] Instr,
+  input flush,
   output [31:0] PC_o,
   output [31:0] Instr_o
 );
@@ -11,7 +12,7 @@ module IF_ID_Register(
   reg [31:0] Instr_r;
 
   always @ (posedge CLK, negedge RESET) begin
-    if (!RESET) begin
+    if ((!RESET) | flush) begin
       PC_r <= 32'b0;
       Instr_r <= 32'b0;
     end

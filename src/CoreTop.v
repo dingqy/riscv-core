@@ -17,6 +17,7 @@ module CoreTop(
   wire [31:0] PCResult; // The result of next PC value
   wire PCSrc; // Determine whether the next PC should be PCJump or PC + 4
   wire [31:0] BranchTargetAddress; // The target brach address
+  wire PCBranchCmp;
 
   // PC related register data
   wire [31:0] BranchTargetAddress_EX_MEM; // The target branch address given by EX_MEM register
@@ -127,8 +128,9 @@ module CoreTop(
     if (RESET == 1'b0) PC <= 32'h00002FFC;
     else if (PCWriteEnable == 1'b1) PC <= PCResult;
   end
+  assign PCBranchCmp = Branch & branchCmp_EX_MEM;
   assign PCPlus4 = PC + 4;
-  assign PCResult = (Branch & branchCmp_EX_MEM) ? BranchTargetAddress_EX_MEM :
+  assign PCResult = (PCBranchCmp) ? BranchTargetAddress_EX_MEM :
                     (Jump) ? ALUResult_EX_MEM :
                     PCPlus4;
 
@@ -145,7 +147,8 @@ module CoreTop(
     .PC(PC),
     .Instr(Instr),
     .PC_o(PC_IF_ID),
-    .Instr_o(Instr_IF_ID)
+    .Instr_o(Instr_IF_ID),
+    .flush(PCBranchCmp | Jump)
   );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +167,7 @@ module CoreTop(
   // Register file
   RegisterFile reg2(
     .A1(Instr_IF_ID[19:15]),
-    .A2(Instr_IF_ID[24:20]),
+      .A2(Instr_IF_ID[24:20]),
     .A3(RegDst_MEM_WB),
     .WD3(RegWriteResult),
     .RegWrite(RegWrite),
@@ -221,7 +224,8 @@ module CoreTop(
     .RegisterRs2_i(Instr_IF_ID[24:20]),
     .RegisterRs1(RegisterRs1_ID_EX),
     .RegisterRs2(RegisterRs2_ID_EX),
-    .Enable(WrtieEnable_IF_ID)
+    .Enable(WrtieEnable_IF_ID),
+    .flush(PCBranchCmp | Jump)
   );
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
