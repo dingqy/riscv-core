@@ -11,7 +11,6 @@ module InstructionCache(
   output [31:0] r_data, // return value
   output [108:0] Cache_result, // Used for future input
   output [1:0] r_rsp, // return valid
-  output [1:0] request_mode,
   output r_rsp_valid
 );
 
@@ -62,7 +61,6 @@ module InstructionCache(
   assign rsta = RESET;
   assign sleep = 1'b0;
   assign wea = {14{r_memory_valid_input}}; // may be replaced
-  assign request_mode = 2'b01;
   assign dina = r_memory_write;
 
   always @ (posedge CLK, negedge RESET) begin

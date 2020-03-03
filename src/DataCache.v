@@ -54,6 +54,9 @@ module DataCache(
   wire request_valid_i;
   wire WriteBack;
   wire [108:0] w_result;
+  wire finish;
+  wire finish_temp;
+  wire finish_temp2;
 
   // CMP register output
   wire hit_CMP;
@@ -74,6 +77,7 @@ module DataCache(
   assign sleep = 1'b0;
   assign wea = {14{r_memory_valid_input}} | {14{w_valid_CMP}}; // may be replaced
   assign dina = (w_valid_CMP) ? Cache_result_CMP : r_memory_write;
+
 
   always @ (posedge CLK, negedge RESET) begin
     if (!RESET) begin 
@@ -170,20 +174,24 @@ module DataCache(
   );
 
   // Compare part
+  assign finish_temp = Cache_result_RD[108] & Cache_result_RD[53] & Cache_result_RD[107] & !Cache_result_RD[52];
+  assign finish_temp2 = Cache_result_RD[108] & Cache_result_RD[53] & !Cache_result_RD[107] & !Cache_result_RD[106];
   assign hit_1 = (Cache_result_RD[105:86] == Addr_RD[31:12]) & Cache_result_RD[108];
   assign hit_2 = (Cache_result_RD[51:32] == Addr_RD[31:12]) & Cache_result_RD[53];
   assign hit_CMP_i = hit_1 | hit_2;
   assign r_data_CMP_i = (hit_1) ? Cache_result_RD[85:54] : Cache_result_RD[31:0];
-  assign request_valid_i = !((hit_CMP_i) | ((!Cache_result_RD[108] | !Cache_result_RD[53]) & w_valid_RD));
   assign w_result = (((!Cache_result_RD[108] & Cache_result_RD[53]) | hit_1) & w_valid_RD) ? {3'b111, Addr_RD[31:12], w_data_RD, Cache_result_RD[53:0]} :
                     (((Cache_result_RD[108] & !Cache_result_RD[53]) | hit_2) & w_valid_RD) ? {Cache_result_RD[108], 1'b0, Cache_result_RD[106:54], 2'b11, Addr_RD[31:12], w_data_RD} :
                     (!Cache_result_RD[108] & !Cache_result_RD[53] & w_valid_RD) ? {3'b111, Addr_RD[31:12], w_data_RD, Cache_result_RD[53:0]} :
+                    (finish_temp & w_valid_RD) ? {Cache_result_RD[108], 1'b0, Cache_result_RD[106:54], 2'b11, Addr_RD[31:12], w_data_RD} :
+                    (finish_temp2 & w_valid_RD) ? {3'b111, Addr_RD[31:12], w_data_RD, Cache_result_RD[53:0]} :
                     Cache_result_RD;
+  assign finish = hit_CMP_i | (w_valid_RD & (!Cache_result_RD[108] | !Cache_result_RD[53] | finish_temp | finish_temp2));
 
   CMP_Register_Cache_d cmpreg(
     .r_data_i(r_data_CMP_i),
     .addr_i(addr_CMP_i),
-    .hit_i(hit_CMP_i),
+    .hit_i(finish),
     .CLK(CLK),
     .RESET(RESET),
     .Cache_result_i(w_result),
@@ -191,7 +199,7 @@ module DataCache(
     .Cache_result(Cache_result_CMP),
     .r_data(r_data),
     .addr(addr_CMP),
-    .request_valid_i(request_valid_i),
+    .request_valid_i(!finish),
     .request_valid(request_valid),
     .r_valid_i(r_valid_RD),
     .r_valid(r_valid_CMP),
