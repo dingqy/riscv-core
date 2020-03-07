@@ -70,9 +70,9 @@ AXI Parameters :
 
    Arbitration Scheme            : RD_PRI_REG
 
-   Narrow Burst Support          : 0
+   Narrow Burst Support          : 1
 
-   ID Width                      : 4
+   ID Width                      : 2
 
 
 

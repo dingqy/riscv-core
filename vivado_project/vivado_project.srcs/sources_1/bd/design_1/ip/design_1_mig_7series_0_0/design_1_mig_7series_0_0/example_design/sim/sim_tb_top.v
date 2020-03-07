@@ -177,7 +177,7 @@ module sim_tb_top;
    //***************************************************************************
    // AXI4 Shim parameters
    //***************************************************************************
-   parameter C_S_AXI_ID_WIDTH              = 4;
+   parameter C_S_AXI_ID_WIDTH              = 2;
                                              // Width of all master and slave ID signals.
                                              // # = >= 1.
    parameter C_S_AXI_ADDR_WIDTH            = 32;
@@ -188,7 +188,7 @@ module sim_tb_top;
                                              // Width of WDATA and RDATA on SI slot.
                                              // Must be <= APP_DATA_WIDTH.
                                              // # = 32, 64, 128, 256.
-   parameter C_S_AXI_SUPPORTS_NARROW_BURST = 0;
+   parameter C_S_AXI_SUPPORTS_NARROW_BURST = 1;
                                              // Indicates whether to instatiate upsizer
                                              // Range: 0, 1
 

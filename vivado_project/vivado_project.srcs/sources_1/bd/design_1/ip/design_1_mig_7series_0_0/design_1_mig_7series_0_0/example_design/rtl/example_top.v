@@ -158,7 +158,7 @@ module example_top #
                                      // 1/2, 1/4 and 1/8 of fabrick clock.
                                      // Valid for DDR2/DDR3 AXI interfaces
                                      // based on GUI selection
-   parameter C_S_AXI_ID_WIDTH              = 4,
+   parameter C_S_AXI_ID_WIDTH              = 2,
                                              // Width of all master and slave ID signals.
                                              // # = >= 1.
    parameter C_S_AXI_ADDR_WIDTH            = 27,
@@ -169,7 +169,7 @@ module example_top #
                                              // Width of WDATA and RDATA on SI slot.
                                              // Must be <= APP_DATA_WIDTH.
                                              // # = 32, 64, 128, 256.
-   parameter C_S_AXI_SUPPORTS_NARROW_BURST = 0,
+   parameter C_S_AXI_SUPPORTS_NARROW_BURST = 1,
                                              // Indicates whether to instatiate upsizer
                                              // Range: 0, 1
    parameter C_S_AXI_CTRL_ADDR_WIDTH       = 32,

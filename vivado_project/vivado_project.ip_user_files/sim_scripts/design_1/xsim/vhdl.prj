@@ -1,0 +1,4 @@
+vhdl xil_defaultlib  \
+"../../../bd/design_1/ip/design_1_rst_mig_7series_0_81M_0/sim/design_1_rst_mig_7series_0_81M_0.vhd" \
+
+nosort
